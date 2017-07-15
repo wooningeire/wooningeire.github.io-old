@@ -1,5 +1,94 @@
 <!DOCTYPE html>
 
 <html lang="en">
-  <body>test</body>
+  <head>
+
+    <title>wooningc&#x201d;s stuff</title>
+    <meta charset="UTF-8" />
+
+    <!-- font -->
+    <link href=https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,700" rel="stylesheet" />
+
+    <style type="text/css">
+      body {
+        margin: 0;
+        font-family: Montserrat, "Open Sans", sans-serif;
+        text-align: center;
+        letter-spacing: 6px;
+        color: #fff;
+        cursor: default;
+        user-select: none;
+        overflow: hidden;
+      }
+
+      .container {
+        display: table;
+        background: hsl(0, 50%, 60%);
+        min-width: 100vw;
+        min-height: 100vh;
+      }
+
+      @keyframes bob-rotate {
+          0% { transform: rotate(-3deg); }
+         50% { transform: rotate( 3deg); }
+        100% { transform: rotate(-3deg); }
+      }
+
+      @-webkit-keyframes bob-rotate {
+          0% { transform: rotate(-3deg); }
+         50% { transform: rotate( 3deg); }
+        100% { transform: rotate(-3deg); }
+      }
+
+      .container > * {
+        display: table-cell;
+        vertical-align: middle;
+        margin: 0 auto;
+        font-size: 72px;
+        font-weight: 700;
+        animation: bob-rotate 4s infinite ease;
+        -webkit-animation: bob-rotate 4s infinite ease;
+        filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, .3));
+        -webkit-filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, .3));
+      }
+      .container > *:after {
+        font-size: 24px;
+        font-weight: 400;
+        display: block;
+        margin-top: 80px;
+        content: "wooningc was probably here";
+      }
+    </style>
+
+    <script type="text/javascript">
+      onload = function() {
+        var container = document.querySelector(".container");
+
+        var hue = 0;
+
+        setInterval(function() {
+
+          hue = hue % 360 + 1;
+
+          container.style.background =
+            "linear-gradient(" +
+              hue + "deg, " +
+              "hsl(" + hue + ", 50%, 60%), " +
+              "hsl(" + ( hue + 60) + ", 50%, 60%)" +
+            ")";
+
+        }, 20);
+
+      };
+    </script>
+
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div>there will probably be something here soon</div>
+    </div>
+
+  </body>
 </html>
