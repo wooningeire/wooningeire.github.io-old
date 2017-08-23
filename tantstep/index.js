@@ -28,7 +28,7 @@ function run() {
       }
     }
   }
-  c.width = Math.max(Number(queryVar("size")), 0) || 384 * 2;
+  c.width = Math.max(Number(queryVar("size")), 0) || 384;
   c.height = c.width / 3 * 2;
 
   var lengthRatio = c.width / 384;
@@ -69,7 +69,6 @@ function run() {
   var circleEyes = crop(234, 0, 20, 12);
 
   x.imageSmoothingEnabled = false;
-  bx1.imageSmoothingEnabled = false;
 
   var colors = ["#ff499d", "#d44b9d", "#d70074", "#450d43"];
   bx1.fillStyle = colors[0];
@@ -296,7 +295,7 @@ function run() {
       audio.play();
     }, T1 * 2);
 
-    audioWatcher(awPairs, 70);
+    audioWatcher(awPairs, 40);
 
     audioWatcher([
       [ 63.5, () => { scale = .75; }],
@@ -340,7 +339,7 @@ function run() {
       [201.5, () => { scale = .3 ; }],
       [202.5, () => { scale = .15; overlayImage = overlayImages[2]; }],
       [208  , () => {              overlayImage = overlayImages[1]; }],
-    ], 70);
+    ], 40);
 
     audioWatcher([[230, () => {
       c.addEventListener("transitionend", () => {
@@ -373,8 +372,8 @@ function run() {
     return iID;
   }
 
-  var iID;
-  function repeat(func, amount, delay, customDelays, doneFunc = () => {}, stoppable = true) {
+  var iIDs = [];
+  function repeat(func, amount, delay, customDelays, doneFunc = () => {}, index = 0) {
     var i = 0;
     interval();
 
@@ -383,10 +382,7 @@ function run() {
       i++;
       var newDelay = customDelays ? customDelays.get(i) || delay : delay;
       if (i <= amount - 1) {
-        var x = setTimeout(interval, newDelay / audio.playbackRate);
-        if (stoppable) {
-          iID = x;
-        }
+        iIDs[index] = setTimeout(interval, newDelay / audio.playbackRate);
       } else {
         doneFunc();
       }
@@ -398,7 +394,7 @@ function run() {
   }
 
   function flickbeat() {
-    clearTimeout(iID);
+    clearTimeout(iIDs[0]);
     repeat((i) => { drawLeft(spriteArray[i + 14]); }, 6, 20, new Map().set(2, 150));
     touch();
   }
@@ -412,7 +408,7 @@ function run() {
   }
 
   function flickoffbeat() {
-    clearTimeout(iID);
+    clearTimeout(iIDs[0]);
     repeat((i) => { drawLeft(spriteArray[i + 20]); }, 6, 20, new Map().set(2, 150));
     touch();
   }
@@ -426,6 +422,7 @@ function run() {
   }
 
   function touch() {
-    repeat((i) => { drawRight(i < 5 ? 4 * i : 40 - 4 * i, i < 6); }, 11, 25, false, () => {}, false);
+    clearTimeout(iIDs[1]);
+    repeat((i) => { drawRight(i < 5 ? 4 * i : 40 - 4 * i, i < 6); }, 11, 25, false, () => {}, 1);
   }
 }
