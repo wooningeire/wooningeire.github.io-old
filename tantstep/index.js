@@ -28,8 +28,10 @@ function run() {
       }
     }
   }
-  c.width = Math.max(Number(queryVar("size")), 0) || 384 * 4;
+  c.width = Math.max(Number(queryVar("size")), 0) || 384 * 2;
   c.height = c.width / 3 * 2;
+
+  var lengthRatio = c.width / 384;
 
   audio.volume = Math.max(Number(queryVar("volume")), 0) || 1;
   audio.playbackRate = Math.max(Number(queryVar("speed")), 0) || 1;
@@ -68,6 +70,37 @@ function run() {
 
   x.imageSmoothingEnabled = false;
   bx1.imageSmoothingEnabled = false;
+
+  var colors = ["#ff499d", "#d44b9d", "#d70074", "#450d43"];
+  bx1.fillStyle = colors[0];
+
+  var cx;
+  var cy;
+
+  function resetTouchCoords() {
+    cx = 96;
+    cy = 128;
+  }
+  resetTouchCoords();
+
+  document.addEventListener("mousemove", (e) => {
+    if (e.target == c) {
+      var rect = c.getBoundingClientRect();
+      var coords = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+
+      if (coords.x > c.width / 2) {
+        cx = (coords.x - c.width / 2) / lengthRatio;
+        cy = coords.y / lengthRatio - 8;
+      } else {
+        resetTouchCoords();
+      }
+    } else {
+      resetTouchCoords();
+    }
+  });
 
   function clear(context = bx0) {
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
@@ -122,10 +155,6 @@ function run() {
     { c: crop(  3, 204, 28, 62), ox: 0, oy: -2 },
   ]);
 
-  var colors = ["#ff499d", "#d44b9d", "#d70074", "#450d43"];
-
-  bx1.fillStyle = colors[0];
-
   function drawLeft(s) {
     clear(bx3);
 
@@ -177,13 +206,13 @@ function run() {
     if (r > 0) {
       bx4.fillStyle = colors[3];
       bx4.beginPath();
-      bx4.arc(96, 128, r, 0, 2 * Math.PI);
+      bx4.arc(cx, cy, r, 0, 2 * Math.PI);
       bx4.fill();
 
       if (showMiddleCircle) {
-        bx4.drawImage(middleCircle, 88, 120);
+        bx4.drawImage(middleCircle, cx - 8, cy - 8);
       }
-      bx4.drawImage(circleEyes, 86, 116 - 5 - r);
+      bx4.drawImage(circleEyes, cx - 10, cy - 17 - r);
 
       bx2.drawImage(bc4, 0, 0);
     }
